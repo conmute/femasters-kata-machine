@@ -14,7 +14,7 @@ export default class MinHeap {
 
   // O(log n) time complexity, cause we move through BT height only
   insert(value: number): void {
-    this.data.push(value)
+    this.data[this.length] = value
     this.length++
     minHeapBubbleUp(this.data, this.length - 1)
   }
@@ -76,7 +76,7 @@ function minHeapBubbleUp<T>(arr: Array<T>, idx: number) {
 }
 
 function minHeapBubbleDown<T>([arr, length]: [Array<T>, number], idx: number) {
-  if (idx >= arr.length) return
+  if (idx >= length) return
   if (getLeftChildIDX(idx) >= length) return
 
   // const ridx = getRightChildIDX(idx)
