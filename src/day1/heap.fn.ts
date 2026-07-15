@@ -6,6 +6,24 @@
  * For a max-heap, pass `(a, b) => a > b` (or negate values and stay min-heap).
  */
  
+function siftDown(arr, i, cmp) {
+  while (true) {
+    const l = 2 * i + 1;
+    const r = 2 * i + 2;
+    let best = i;
+ 
+    if (l < arr.length && cmp(arr[l], arr[best])) best = l;
+    if (r < arr.length && cmp(arr[r], arr[best])) best = r;
+    if (best === i) break;
+ 
+    [arr[i], arr[best]] = [arr[best], arr[i]];
+    i = best;
+  }
+}
+ 
+/**
+ * Inserts `val`. O(log n).
+ */
 function heapInsert(arr, val, cmp = (a, b) => a < b) {
   arr.push(val);
   let i = arr.length - 1;
@@ -26,20 +44,7 @@ function heapDelete(arr, cmp = (a, b) => a < b) {
  
   if (arr.length > 0) {
     arr[0] = last;
-    let i = 0;
- 
-    while (true) {
-      const l = 2 * i + 1;
-      const r = 2 * i + 2;
-      let best = i;
- 
-      if (l < arr.length && cmp(arr[l], arr[best])) best = l;
-      if (r < arr.length && cmp(arr[r], arr[best])) best = r;
-      if (best === i) break;
- 
-      [arr[i], arr[best]] = [arr[best], arr[i]];
-      i = best;
-    }
+    siftDown(arr, 0, cmp);
   }
  
   return top;
@@ -49,18 +54,8 @@ function heapDelete(arr, cmp = (a, b) => a < b) {
 // NOT n * heapInsert (that'd be O(n log n)).
 function heapify(arr, cmp = (a, b) => a < b) {
   for (let i = Math.floor(arr.length / 2) - 1; i >= 0; i--) {
-    let idx = i;
-    while (true) {
-      const l = 2 * idx + 1;
-      const r = 2 * idx + 2;
-      let best = idx;
- 
-      if (l < arr.length && cmp(arr[l], arr[best])) best = l;
-      if (r < arr.length && cmp(arr[r], arr[best])) best = r;
-      if (best === idx) break;
- 
-      [arr[idx], arr[best]] = [arr[best], arr[idx]];
-      idx = best;
-    }
+    siftDown(arr, i, cmp);
   }
 }
+ 
+export { heapInsert, heapDelete, heapify };
